@@ -30,11 +30,30 @@ def import_eigen3_types(mod):
 def import_sva_types(mod):
   mod.add_class('PTransformd', foreign_cpp_namespace='sva', import_from_module='spacevecalg')
 
-
+def build_sch_containers(sch):
+  sch.add_container('std::vector<Eigen::Vector3d>',
+                    'Eigen::Vector3d',
+                    'vector')
+  sch.add_container('std::vector<unsigned int>', 'unsigned int', 'vector')
+  sch.add_container('std::vector<std::vector<unsigned int> >', 'std::vector<unsigned int>', 'vector')
 
 def build_sch(sch):
   obj = sch.add_class('S_Object')
   pair = sch.add_class('CD_Pair')
+  polyhedron = sch.add_class('S_Polyhedron', parent=obj)
+
+  polyhedron.add_function_as_method('vertices', 'std::vector<Eigen::Vector3d>',
+                                    [param('sch::S_Polyhedron', 'poly')],
+                                    custom_name='vertices')
+
+  polyhedron.add_function_as_method('triangles', 'std::vector<std::vector<unsigned int> >',
+                                    [param('sch::S_Polyhedron', 'poly')],
+                                    custom_name='triangles')
+
+  polyhedron.add_function_as_method('normals', 'std::vector<Eigen::Vector3d>',
+                                    [param('sch::S_Polyhedron', 'poly')],
+                                    custom_name='normals')
+
 
   obj.add_function_as_method('transform', None, [param('sch::S_Object&', 'obj'),
                                                  param('const sva::PTransformd&', 'trans')],
@@ -49,7 +68,7 @@ def build_sch(sch):
                     param('double', 'z')])
   sch.add_function('STPBV', retval('sch::S_Object*', caller_owns_return=True),
                    [param('const std::string&', 'filename')])
-  sch.add_function('Polyhedron', retval('sch::S_Object*', caller_owns_return=True),
+  sch.add_function('Polyhedron', retval('sch::S_Polyhedron*', caller_owns_return=True),
                    [param('const std::string&', 'filename')])
 
 
@@ -77,6 +96,8 @@ if __name__ == '__main__':
   sch.add_include('<sch/S_Object/S_Sphere.h>')
   sch.add_include('<sch/S_Object/S_Box.h>')
   sch.add_include('<sch/S_Polyhedron/S_Polyhedron.h>')
+  sch.add_include('<sch/S_Polyhedron/S_PolyhedronVertex.h>')
+  sch.add_include('<sch/S_Polyhedron/Polyhedron_algorithms.h>')
   sch.add_include('<sch/STP-BV/STP_BV.h>')
   sch.add_include('<sch/CD/CD_Pair.h>')
 
@@ -92,6 +113,7 @@ if __name__ == '__main__':
   import_sva_types(sch)
 
   # sch
+  build_sch_containers(sch)
   build_sch(sch)
 
   with open(sys.argv[1], 'w') as f:
