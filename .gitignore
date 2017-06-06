@@ -1,0 +1,4 @@
+eigen/eigen.pyx
+eigen/eigen.pxd
+*.pyc
+*.cpp
