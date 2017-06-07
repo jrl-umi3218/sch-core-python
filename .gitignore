@@ -1,4 +1,3 @@
-eigen/eigen.pyx
-eigen/eigen.pxd
+sch/__init__.py
 *.pyc
 *.cpp
