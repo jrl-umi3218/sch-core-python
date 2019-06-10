@@ -45,3 +45,5 @@ notifications:
   - provider: Slack
     incoming_webhook:
       secure: gAze73sSl1vrNGaeUEd841yVJ/rVE10tIWjlt+/8OPn0lT42+nSjNqS3bSNgmS+UwyZNe0vzpBTCl6Lx3JEltYNoad96Ss31BEm/7MNLxgc=
+#on_finish:
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
