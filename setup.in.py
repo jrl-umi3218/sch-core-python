@@ -40,7 +40,8 @@ version_hash = sha512.hexdigest()[:7]
 
 class pkg_config(object):
   def __init__(self):
-    self.compile_args = ['-std=c++11']
+    self.compile_args = [ '-D' + x for x in '@COMPILE_DEFINITIONS@'.split(';') if len(x) ]
+    self.compile_args += ['-std=c++11']
     if win32_build:
         self.compile_args.append('-DWIN32')
     self.include_dirs = [ x for x in '$<TARGET_PROPERTY:SpaceVecAlg::SpaceVecAlg,INTERFACE_INCLUDE_DIRECTORIES>;$<TARGET_PROPERTY:sch-core::sch-core,INCLUDE_DIRECTORIES>'.split(';') if len(x) ]

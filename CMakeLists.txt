@@ -7,6 +7,8 @@ cmake_minimum_required(VERSION 2.8)
 find_package(SpaceVecAlg REQUIRED)
 find_package(sch-core REQUIRED)
 
+get_directory_property(COMPILE_DEFINITIONS COMPILE_DEFINITIONS)
+
 option(PYTHON_BINDING "Generate Python binding" ON)
 if(WIN32)
   set(PYTHON_BINDING_USER_INSTALL_DEFAULT ON)
