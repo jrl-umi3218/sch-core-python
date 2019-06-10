@@ -48,7 +48,7 @@ class pkg_config(object):
     self.include_dirs.append(this_path + '/include')
     self.library_dirs = [ x for x in '$<TARGET_PROPERTY:sch-core::sch-core,LINK_FLAGS>'.split(';') if len(x) ]
     location = '$<TARGET_PROPERTY:sch-core::sch-core,LOCATION_$<CONFIGURATION>>'
-    self.library_dirs.append(os.path.dirname(location))
+    self.library_dirs.append(os.path.dirname(location) + "/../lib/")
     if "$<CONFIGURATION>".lower() == "debug":
         self.libraries = ['sch-core_d']
     else:
