@@ -28,7 +28,7 @@ language: cpp
 env:
   global:
     - CMAKE_ADDITIONAL_OPTIONS="-DPYTHON_BINDING_BUILD_PYTHON2_AND_PYTHON3:BOOL=ON -DPYTHON_BINDING_USER_INSTALL:BOOL=ON"
-    - GIT_DEPENDENCIES="jrl-umi3218/Eigen3ToPython jrl-umi3218/SpaceVecAlg jrl-umi3218/sch-core#topic/modern-cmake"
+    - GIT_DEPENDENCIES="jrl-umi3218/Eigen3ToPython jrl-umi3218/SpaceVecAlg jrl-umi3218/sch-core"
   matrix:
     - CMAKE_BUILD_TYPE=RelWithDebInfo
     - CMAKE_BUILD_TYPE=Debug
