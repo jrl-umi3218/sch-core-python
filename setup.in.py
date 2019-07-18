@@ -45,9 +45,10 @@ class pkg_config(object):
     if win32_build:
         self.compile_args.append('-DWIN32')
     self.include_dirs = [ x for x in '$<TARGET_PROPERTY:SpaceVecAlg::SpaceVecAlg,INTERFACE_INCLUDE_DIRECTORIES>;$<TARGET_PROPERTY:sch-core::sch-core,INCLUDE_DIRECTORIES>'.split(';') if len(x) ]
-    if '@Boost_INCLUDE_DIR@' != '':
-      self.include_dirs.append('@Boost_INCLUDE_DIR@')
+    #if '@Boost_INCLUDE_DIR@' != '':
+    self.include_dirs.append('@Boost_INCLUDE_DIR@')
     self.include_dirs.append(this_path + '/include')
+    self.include_dirs = filter(len, self.include_dirs)
     self.library_dirs = [ x for x in '$<TARGET_PROPERTY:sch-core::sch-core,LINK_FLAGS>'.split(';') if len(x) ]
     location = '$<TARGET_PROPERTY:sch-core::sch-core,LOCATION_$<CONFIGURATION>>'
     self.library_dirs.append(os.path.dirname(location) + "/../lib/")
