@@ -63,6 +63,7 @@ def GenExtension(name, pkg, ):
   cpp_src = pyx_src + '.cpp'
   pyx_src = pyx_src + '.pyx'
   ext_src = pyx_src
+  pkg.include_dirs=list(pkg.include_dirs)
   return Extension(name, [ext_src], extra_compile_args = pkg.compile_args, include_dirs = pkg.include_dirs + [numpy.get_include()], library_dirs = pkg.library_dirs, libraries = pkg.libraries)
 
 extensions = [
