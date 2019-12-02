@@ -1,3 +1,9 @@
+python-sch-core (1.0.1-1ubuntu1) unstable; urgency=medium
+
+  * Include files in generated packages
+
+ -- Pierre Gergondet <pierre.gergondet+ppa@gmail.com>  Mon, 02 Dec 2019 15:08:11 +0800
+
 python-sch-core (1.0.0-1ubuntu1) unstable; urgency=medium
 
   * Initial release
