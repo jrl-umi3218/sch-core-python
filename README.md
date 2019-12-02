@@ -2,9 +2,8 @@ sch-core-python
 ===============
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-green.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Build Status](https://travis-ci.org/jrl-umi3218/sch-core-python.svg?branch=master)](https://travis-ci.org/jrl-umi3218/sch-core-python)
-[![AppVeyor status](https://ci.appveyor.com/api/projects/status/0xoexolfeqxkgxye/branch/master?svg=true)](https://ci.appveyor.com/project/gergondet/sch-core-python/branch/master)
 [ ![Download](https://api.bintray.com/packages/gergondet/multi-contact/sch-core-python%3Agergondet/images/download.svg) ](https://bintray.com/gergondet/multi-contact/sch-core-python%3Agergondet/_latestVersion)
+[![CI](https://github.com/jrl-umi3218/sch-core-python/workflows/CI%20of%20sch-core-python/badge.svg?branch=master)](https://github.com/jrl-umi3218/sch-core-python/actions?query=workflow%3A%22CI+of+sch-core-python%22)
 
 Python bindings for [sch-core][core]. These bindings were initially part of
 [Tasks][tasks] by @jorisv.
@@ -12,13 +11,23 @@ Python bindings for [sch-core][core]. These bindings were initially part of
 Installing
 ------
 
-## Ubuntu LTS (14.04, 16.04, 18.04): PPA
+## Ubuntu LTS (16.04, 18.04, 20.04)
 
-Use the [multi-contact-unstable](https://launchpad.net/~pierre-gergondet+ppa/+archive/ubuntu/multi-contact-unstable) ppa:
+Note: the packaged version is the BSD-2-Clause library, if you require inter-penetration depth computation, you should build the library yourself.
+
 ```bash
-sudo add-apt-repository ppa:pierre-gergondet+ppa/multi-contact-unstable
-sudo apt-get update
-sudo apt-get install python-sch-core python3-sch-core
+# Make sure you have required tools
+sudo apt install apt-transport-https lsb-release
+# Add our key
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key 892EA6EE273707C6495A6FB6220D644C64666806
+# Add our repository (stable versions)
+sudo sh -c 'echo "deb https://dl.bintray.com/gergondet/multi-contact-release $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/multi-contact.list'
+# Use this to setup the HEAD version
+# sudo sh -c 'echo "deb https://dl.bintray.com/gergondet/multi-contact-release $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/multi-contact.list'
+# Update packages list
+sudo apt update
+# Install packages
+sudo apt install python-sch-core python3-sch-core
 ```
 
 ## Build from source
