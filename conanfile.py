@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2012-2019 CNRS-UM LIRMM, CNRS-AIST JRL
+# Copyright 2012-2020 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
 from conans import python_requires
-import subprocess
 
-base = python_requires("Eigen3ToPython/1.0.0@gergondet/stable")
-
-def get_python_version():
-    # Get the version of the Python executable, not this one
-    return '.'.join(subprocess.check_output('python -V'.split(), stderr = subprocess.STDOUT).strip().split()[1].decode().split('.')[0:2])
+base = python_requires("Eigen3ToPython/latest@multi-contact/dev")
 
 class SCHCorePythonConan(base.Eigen3ToPythonConan):
     name = "sch-core-python"
-    version = "1.0.0"
+    version = "1.0.1"
     description = "Python bindings for the sch-core library"
     # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
     topics = ("robotics", "collision", "proximity", "convex", "python")
@@ -25,14 +20,11 @@ class SCHCorePythonConan(base.Eigen3ToPythonConan):
     exports = ["LICENSE"]      # Packages the license for the conanfile.py
     # Remove following lines if the target lib does not use cmake.
     exports_sources = ["CMakeLists.txt", "setup.in.py", "conan/CMakeLists.txt", "sch/*", "include/*", "tests/*"]
-    generators = "cmake"
-    options = { "python_version": ["2.7", "3.3", "3.4", "3.5", "3.6", "3.7"] }
-    default_options = { "python_version": get_python_version() }
+    generators = ["cmake_find_package", "cmake_paths"]
     settings = "os", "arch", "compiler", "build_type"
-
     requires = (
-        "SpaceVecAlg/1.1.0@gergondet/stable",
-        "sch-core/1.0.0@gergondet/stable"
+        "SpaceVecAlg/latest@multi-contact/dev",
+        "sch-core/latest@multi-contact/dev"
     )
 
     def package_info(self):
