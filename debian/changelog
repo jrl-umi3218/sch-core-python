@@ -1,3 +1,9 @@
+python-sch-core (1.0.2-1ubuntu1) unstable; urgency=medium
+
+  * Update upstream version
+
+ -- Pierre Gergondet <pierre.gergondet+ppa@gmail.com>  Tue, 08 Sep 2020 19:35:30 +0800
+
 python-sch-core (1.0.1-1ubuntu1) unstable; urgency=medium
 
   * Include files in generated packages

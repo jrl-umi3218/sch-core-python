@@ -9,7 +9,7 @@ base = python_requires("Eigen3ToPython/latest@multi-contact/dev")
 
 class SCHCorePythonConan(base.Eigen3ToPythonConan):
     name = "sch-core-python"
-    version = "1.0.1"
+    version = "1.0.2"
     description = "Python bindings for the sch-core library"
     # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
     topics = ("robotics", "collision", "proximity", "convex", "python")
