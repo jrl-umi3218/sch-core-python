@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(sch-core-python)
-set(PROJECT_VERSION 1.0.2)
+set(PROJECT_VERSION 1.0.3)
 
 find_package(SpaceVecAlg REQUIRED NO_MODULE)
 find_package(sch-core REQUIRED NO_MODULE)
