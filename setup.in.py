@@ -21,8 +21,6 @@ import sys
 win32_build = os.name == 'nt'
 
 this_path  = os.path.dirname(os.path.realpath(__file__))
-with open(this_path + '/sch/__init__.py', 'w') as fd:
-    fd.write('from .sch import *\n')
 
 sha512 = hashlib.sha512()
 src_files = ['sch/c_sch_private.pxd', 'sch/sch.pyx', 'sch/c_sch.pxd', 'sch/sch.pxd', 'include/sch_wrapper.hpp']

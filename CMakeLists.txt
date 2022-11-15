@@ -61,6 +61,11 @@ macro(ADD_BINDINGS PYTHON SOURCES)
     OUTPUT "${SETUP_LOCATION}/setup.py"
     INPUT "${CMAKE_CURRENT_BINARY_DIR}/setup.py"
   )
+  # Generate __init__.py
+  file(GENERATE
+    OUTPUT "${SETUP_LOCATION}/sch/__init__.py"
+    INPUT "${PROJECT_SOURCE_DIR}/sch/__init__.py"
+  )
   # Target to build the bindings
   set(TARGET_NAME sch-${PYTHON}-bindings)
   add_custom_target(${TARGET_NAME} ALL
