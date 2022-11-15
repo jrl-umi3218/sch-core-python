@@ -70,7 +70,7 @@ macro(ADD_BINDINGS PYTHON SOURCES)
   set(TARGET_NAME sch-${PYTHON}-bindings)
   add_custom_target(${TARGET_NAME} ALL
     COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} setup.py build_ext --inplace
-    COMMENT "Genearting local sch-core ${PYTHON} bindings"
+    COMMENT "Generating local sch-core ${PYTHON} bindings"
     DEPENDS ${SOURCES} SOURCES ${SOURCES}
   )
   # Copy sources
