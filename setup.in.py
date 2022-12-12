@@ -89,7 +89,7 @@ extensions = cythonize(extensions)
 
 setup(
     name = 'sch',
-    version='@PROJECT_VERSION@-{}'.format(version_hash),
+    version='@PROJECT_VERSION@+{}'.format(version_hash),
     ext_modules = extensions,
     packages = packages,
     package_data = { 'sch': data }
