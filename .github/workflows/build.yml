@@ -1,6 +1,7 @@
 name: CI of sch-core-python
 
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - '**'
