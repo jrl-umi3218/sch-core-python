@@ -19,6 +19,7 @@ import subprocess
 import sys
 
 win32_build = os.name == 'nt'
+macos_build = sys.platform == "darwin"
 
 this_path  = os.path.dirname(os.path.realpath(__file__))
 
@@ -47,8 +48,10 @@ class pkg_config(object):
     self.include_dirs.append(this_path + '/include')
     self.include_dirs = filter(len, self.include_dirs)
     self.library_dirs = [ x for x in '$<TARGET_PROPERTY:sch-core::sch-core,LINK_FLAGS>'.split(';') if len(x) ]
-    location = '$<TARGET_PROPERTY:sch-core::sch-core,LOCATION_$<CONFIGURATION>>'
-    self.library_dirs.append(os.path.dirname(location) + "/../lib/")
+    location = os.path.dirname('$<TARGET_PROPERTY:sch-core::sch-core,LOCATION_$<CONFIGURATION>>')
+    if win32_build:
+        location = location + "/../lib/"
+    self.library_dirs.append(location)
     if "$<CONFIGURATION>".lower() == "debug":
         self.libraries = ['sch-core_d']
     else:
@@ -62,7 +65,15 @@ def GenExtension(name, pkg, ):
   pyx_src = pyx_src + '.pyx'
   ext_src = pyx_src
   pkg.include_dirs=list(pkg.include_dirs)
-  return Extension(name, [ext_src], extra_compile_args = pkg.compile_args, include_dirs = pkg.include_dirs + [numpy.get_include()], library_dirs = pkg.library_dirs, libraries = pkg.libraries)
+  if macos_build:
+      extra_link_args = ['-mmacosx-version-min=@CMAKE_OSX_DEPLOYMENT_TARGET@']
+  else:
+      extra_link_args = []
+  if win32_build:
+      runtime_library_dirs = []
+  else:
+      runtime_library_dirs = list(filter(lambda x: not x.startswith('/usr/lib/'), pkg.library_dirs))
+  return Extension(name, [ext_src], extra_compile_args = pkg.compile_args, include_dirs = pkg.include_dirs + [numpy.get_include()], library_dirs = pkg.library_dirs, runtime_library_dirs = runtime_library_dirs, libraries = pkg.libraries, extra_link_args = extra_link_args)
 
 extensions = [
   GenExtension('sch.sch', configs)
