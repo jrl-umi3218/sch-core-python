@@ -65,7 +65,7 @@ def GenExtension(name, pkg, ):
   pyx_src = pyx_src + '.pyx'
   ext_src = pyx_src
   pkg.include_dirs=list(pkg.include_dirs)
-  if macos_build:
+  if macos_build and len('@CMAKE_OSX_DEPLOYMENT_TARGET@') != 0:
       extra_link_args = ['-mmacosx-version-min=@CMAKE_OSX_DEPLOYMENT_TARGET@']
   else:
       extra_link_args = []
