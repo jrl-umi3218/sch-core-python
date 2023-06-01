@@ -46,7 +46,7 @@ endmacro()
 
 configure_file(setup.in.py ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
 
-macro(ADD_BINDINGS PYTHON SOURCES)
+macro(ADD_BINDINGS PYTHON PYTHON_EXECUTABLE SOURCES)
   # Create the build directory
   set(SETUP_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/${PYTHON}/$<CONFIGURATION>")
   if(DEFINED CMAKE_BUILD_TYPE)
@@ -69,7 +69,7 @@ macro(ADD_BINDINGS PYTHON SOURCES)
   # Target to build the bindings
   set(TARGET_NAME sch-${PYTHON}-bindings)
   add_custom_target(${TARGET_NAME} ALL
-    COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} setup.py build_ext --inplace
+    COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON_EXECUTABLE} setup.py build_ext --inplace
     COMMENT "Generating local sch-core ${PYTHON} bindings"
     DEPENDS ${SOURCES} SOURCES ${SOURCES}
   )
@@ -87,19 +87,19 @@ macro(ADD_BINDINGS PYTHON SOURCES)
   endforeach()
   # Manual target to force regeneration
   add_custom_target(force-${TARGET_NAME}
-    COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} setup.py build_ext --inplace --force
+    COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON_EXECUTABLE} setup.py build_ext --inplace --force
     COMMENT "Generating local sch-core ${PYTHON} bindings (forced)"
   )
   if(NOT ${DISABLE_TESTS})
     enable_testing()
     add_test(NAME test-${TARGET_NAME}
-      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} -m pytest
+      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON_EXECUTABLE} -m pytest
     )
   endif()
   # Install targets
   if(DEFINED PYTHON_DEB_ROOT)
     add_custom_target(install-${TARGET_NAME}
-      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} setup.py install --root=${PYTHON_DEB_ROOT} --install-layout=deb
+      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON_EXECUTABLE} setup.py install --root=${PYTHON_DEB_ROOT} --install-layout=deb
       COMMENT "Install sch-core ${PYTHON} bindings (Debian layout)"
     )
   else()
@@ -108,12 +108,27 @@ macro(ADD_BINDINGS PYTHON SOURCES)
       set(PIP_EXTRA_OPTIONS "--user")
     endif()
     if(DEFINED PIP_INSTALL_PREFIX)
-      _pip_has_install_system(${PYTHON} PIP_HAS_INSTALL_SYSTEM)
-      execute_process(COMMAND ${PYTHON} -c "import sys; print(\"python{}.{}\".format(sys.version_info.major, sys.version_info.minor));" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+      _pip_has_install_system(${PYTHON_EXECUTABLE} PIP_HAS_INSTALL_SYSTEM)
+      execute_process(
+        COMMAND
+          ${PYTHON_EXECUTABLE} -c
+          "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix = '${PIP_INSTALL_PREFIX}', plat_specific = True))"
+        RESULT_VARIABLE PYTHON_INSTALL_DESTINATION_FOUND
+        OUTPUT_VARIABLE PIP_TARGET
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      # Debian/Ubuntu has a specific problem here See
+      # https://github.com/mesonbuild/meson/issues/8739 for an overview of the
+      # problem
       if(EXISTS /etc/debian_version)
-        set(PIP_TARGET "${PIP_INSTALL_PREFIX}/lib/${PYTHON_VERSION}/dist-packages/")
-      else()
-        set(PIP_TARGET "${PIP_INSTALL_PREFIX}/lib/${PYTHON_VERSION}/site-packages/")
+        execute_process(
+          COMMAND
+            ${PYTHON_EXECUTABLE} -c
+            "import sys; print(\"python{}.{}\".format(sys.version_info.major, sys.version_info.minor));"
+          OUTPUT_VARIABLE PYTHON_VERSION
+          OUTPUT_STRIP_TRAILING_WHITESPACE)
+        string(REPLACE "python3/" "${PYTHON_VERSION}/"
+                       PIP_TARGET
+                       "${PIP_TARGET}")
       endif()
       set(PIP_EXTRA_OPTIONS --target "${PIP_TARGET}")
       if(${PIP_HAS_INSTALL_SYSTEM})
@@ -121,7 +136,7 @@ macro(ADD_BINDINGS PYTHON SOURCES)
       endif()
     endif()
     add_custom_target(install-${TARGET_NAME}
-      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON} -m pip install . ${PIP_EXTRA_OPTIONS} --upgrade
+      COMMAND ${CMAKE_COMMAND} -E chdir "${SETUP_LOCATION}" ${PYTHON_EXECUTABLE} -m pip install . ${PIP_EXTRA_OPTIONS} --upgrade
       COMMENT "Install sch-core ${PYTHON} bindings"
     )
   endif()
@@ -138,16 +153,26 @@ set(BINDINGS_SOURCES
   tests/test_sch.py
 )
 
+if(NOT DEFINED Python_EXECUTABLE)
+  set(Python_EXECUTABLE "python")
+endif()
+if(NOT DEFINED Python2_EXECUTABLE)
+  set(Python2_EXECUTABLE "python2")
+endif()
+if(NOT DEFINED Python3_EXECUTABLE)
+  set(Python3_EXECUTABLE "python3")
+endif()
+
 if(${PYTHON_BINDING})
   if(${PYTHON_BINDING_BUILD_PYTHON2_AND_PYTHON3})
-    ADD_BINDINGS("python2" "${BINDINGS_SOURCES}")
-    ADD_BINDINGS("python3" "${BINDINGS_SOURCES}")
+    ADD_BINDINGS(python2 "${Python2_EXECUTABLE}" "${BINDINGS_SOURCES}")
+    ADD_BINDINGS(python3 "${Python3_EXECUTABLE}" "${BINDINGS_SOURCES}")
   elseif(${PYTHON_BINDING_FORCE_PYTHON3})
-    ADD_BINDINGS("python3" "${BINDINGS_SOURCES}")
+    ADD_BINDINGS(python3 "${Python3_EXECUTABLE}" "${BINDINGS_SOURCES}")
   elseif(${PYTHON_BINDING_FORCE_PYTHON2})
-    ADD_BINDINGS("python2" "${BINDINGS_SOURCES}")
+    ADD_BINDINGS(python2 "${Python2_EXECUTABLE}" "${BINDINGS_SOURCES}")
   else()
-    ADD_BINDINGS("python" "${BINDINGS_SOURCES}")
+    ADD_BINDINGS(python "${Python_EXECUTABLE}" "${BINDINGS_SOURCES}")
   endif()
 else()
   enable_testing()
