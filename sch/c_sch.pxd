@@ -2,8 +2,6 @@
 # Copyright 2012-2019 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
-from eigen.c_eigen cimport Vector3d
-from sva.c_sva cimport *
 from libcpp.string cimport string
 
 cdef extern from "<sch/S_Object/S_Object.h>" namespace "sch":

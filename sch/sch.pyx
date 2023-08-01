@@ -4,8 +4,8 @@
 # Copyright 2012-2019 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
-cimport c_sch
-cimport c_sch_private
+cimport sch.c_sch as c_sch
+cimport sch.c_sch_private as c_sch_private
 cimport eigen.eigen as eigen
 cimport sva.sva as sva
 

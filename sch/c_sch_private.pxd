@@ -5,7 +5,7 @@
 from eigen.c_eigen cimport Vector3d
 from sva.c_sva cimport *
 
-from c_sch cimport *
+from sch.c_sch cimport *
 
 cdef extern from "sch_wrapper.hpp" namespace "sch":
   void transform(S_Object & obj, const PTransformd&)

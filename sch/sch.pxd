@@ -2,7 +2,7 @@
 # Copyright 2012-2019 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
-cimport c_sch
+cimport sch.c_sch as c_sch
 from libcpp cimport bool as cppbool
 
 cdef extern from "<memory>" namespace "std" nogil:
