@@ -1,11 +1,11 @@
 #
-# Copyright 2012-2019 CNRS-UM LIRMM, CNRS-AIST JRL
+# Copyright 2012-2026 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.22)
 
 project(sch-core-python)
-set(PROJECT_VERSION 1.0.5)
+set(PROJECT_VERSION 1.0.6)
 
 find_package(SpaceVecAlg REQUIRED NO_MODULE)
 find_package(sch-core REQUIRED NO_MODULE)
