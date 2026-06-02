@@ -20,7 +20,7 @@ jobs:
       deps: '["jrl-umi3218/Tasks"]'
       matrix: |
           {
-            "dist": ["bionic", "focal", "jammy"],
+            "dist": ["jammy", "noble", "resolute"],
             "arch": ["amd64"],
             "include":
             [

@@ -11,7 +11,7 @@ Python bindings for [sch-core][core]. These bindings were initially part of
 Installing
 ------
 
-## Ubuntu LTS (16.04, 18.04, 20.04)
+## Ubuntu LTS (22.04, 24.04, 26.04)
 
 Note: the packaged version is the BSD-2-Clause library, if you require inter-penetration depth computation, you should build the library yourself.
 
